@@ -2,9 +2,10 @@ import fs from "fs";
 import Router from "@koa/router";
 import debug from "debug";
 
+import { discover } from "./discover.js";
+
 const log = debug("api:endpoints");
 const router = new Router();
-const models = JSON.parse(fs.readFileSync("./models.json").toString());
 
 const buildMethodMiddleware = {
   get: ({ db, endpointName, tableName, propertiesToFields, primaryKey }) => {
@@ -59,7 +60,9 @@ const buildMethodMiddleware = {
   }
 }
 
-const endpoints = (db) => {
+const endpoints = (db, modelConfiguration = null) => {
+  const models = modelConfiguration || JSON.parse(fs.readFileSync("./models.json").toString());
+
   Object.keys(models).forEach(model => {
     const endpointName = model;
     const endpointOptions = models[model];
@@ -70,6 +73,7 @@ const endpoints = (db) => {
       buildMethodMiddleware[method]({ db, endpointName, tableName, propertiesToFields, primaryKey });
     });
   });
+
   return router.routes();
 };
 
