@@ -28,11 +28,23 @@ const buildMethodMiddleware = {
       ctx.status = 201;
     });
   },
-  put: (db, endpointName, tableName, propertiesToFields) => {
+  put: ({ db, endpointName, tableName, propertiesToFields, primaryKey }) => {
+    router.put(`/${endpointName}/:id`, async (ctx) => {
+      const [primaryKeyProperty] = propertiesToFields.find(
+        ([, field]) => field === primaryKey
+      );
+      const record = propertiesToFields.filter(
+        ([property]) => property !== primaryKeyProperty
+      ).map(
+        ([property, field]) => ({ [field]: ctx.request.body[property] })
+      ).reduce(
+        (row, keyValue) => ({ ...row, ...keyValue })
+      );
 
-  },
-  delete: (db, endpointName, tableName, propertiesToFields) => {
+      await db(tableName).where({ [primaryKey]: ctx.params[primaryKeyProperty] }).update(record);
 
+      ctx.status = 200;
+    });
   }
 }
 
