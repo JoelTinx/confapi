@@ -45,6 +45,17 @@ const buildMethodMiddleware = {
 
       ctx.status = 200;
     });
+  },
+  delete: ({ db, endpointName, tableName, propertiesToFields, primaryKey }) => {
+    router.del(`/${endpointName}/:id`, async (ctx) => {
+      const [primaryKeyProperty] = propertiesToFields.find(
+        ([, field]) => field === primaryKey
+      );
+
+      await db(tableName).where({ [primaryKey]: ctx.params[primaryKeyProperty] }).delete();
+
+      ctx.status = 204;
+    });
   }
 }
 
