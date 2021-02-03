@@ -1,14 +1,13 @@
 import Koa from "koa";
 import cors from "@koa/cors";
-import Router from "@koa/router";
 import debug from "debug";
 import Knex from "knex";
+import { endpoints } from "./api.js";
 
 const { DB_HOST, DB_PORT, DB_USER, DB_PWD, DB_NAME } = process.env;
 
 const log = debug("api");
 const app = new Koa();
-const router = new Router();
 const db = Knex({
   client: "mysql2",
   connection: {
@@ -20,16 +19,8 @@ const db = Knex({
   }
 });
 
-router.get("/artists", async (ctx) => {
-  ctx.body = await db("Artist").select().limit(10);
-});
-
-router.get("/tracks", async (ctx) => {
-  ctx.body = await db("Track").select().limit(10);
-});
-
 app.use(cors());
-app.use(router.routes());
+app.use(endpoints(db));
 
 app.listen(3000, () => {
   log("ready");

@@ -1,0 +1,23 @@
+{
+  "artists": {
+    "tableName": "Artist",
+    "properties": {
+      "id": "ArtistId",
+      "name": "Name"
+    }
+  },
+  "tracks": {
+    "tableName": "Track",
+    "properties": {
+      "id": "TrackId",
+      "name": "Name",
+      "albumId": "AlbumId",
+      "mediaTypeId": "MediaTypeId",
+      "genreId": "GenreId",
+      "composer": "Composer",
+      "milliseconds": "Milliseconds",
+      "bytes": "Bytes",
+      "unitPrice": "UnitPrice"
+    }
+  }
+}
