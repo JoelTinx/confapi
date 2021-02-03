@@ -1,10 +1,15 @@
 {
   "artists": {
     "tableName": "Artist",
+    "primaryKey": "ArtistId",
     "properties": {
       "id": "ArtistId",
       "name": "Name"
-    }
+    },
+    "methods": [
+      "get",
+      "post"
+    ]
   },
   "tracks": {
     "tableName": "Track",
