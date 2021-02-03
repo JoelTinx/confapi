@@ -1,5 +1,6 @@
 import Koa from "koa";
 import cors from "@koa/cors";
+import body from "koa-body";
 import debug from "debug";
 import Knex from "knex";
 import { endpoints } from "./api.js";
@@ -20,6 +21,7 @@ const db = Knex({
 });
 
 app.use(cors());
+app.use(body({ json: true }));
 app.use(endpoints(db));
 
 app.listen(3000, () => {
